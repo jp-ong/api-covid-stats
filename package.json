@@ -1,0 +1,27 @@
+{
+  "name": "api-covid-stats",
+  "version": "1.0.0",
+  "description": "API for COVID-19 Global Stats",
+  "main": "server.js",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^8.2.0",
+    "express": "^4.17.1",
+    "mongoose": "^5.11.14"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "start": "node server",
+    "server": "nodemon server"
+  },
+  "author": "John Paul Ong",
+  "license": "ISC",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jp-ong/api-covid-stats.git"
+  },
+  "bugs": {
+    "url": "https://github.com/jp-ong/api-covid-stats/issues"
+  },
+  "homepage": "https://github.com/jp-ong/api-covid-stats#readme"
+}
