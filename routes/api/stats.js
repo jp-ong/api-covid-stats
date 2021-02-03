@@ -27,7 +27,7 @@ router.get("/latest/:days", async (req, res) => {
 
     return stats.length > 0
       ? res.status(200).json({ stats })
-      : res.status(404).json({ msg: "No available data for this country." });
+      : res.status(404).json({ msg: "No available data for this date." });
   } catch (err) {
     return res.status(400).json({ msg: "Query error.", err });
   }
@@ -52,7 +52,7 @@ router.get("/country/:country", async (req, res) => {
 
     return stats.length > 0
       ? res.status(200).json({ stats })
-      : res.status(404).json({ msg: "No available data for this date." });
+      : res.status(404).json({ msg: "No available data for this country." });
   } catch (err) {
     return res.status(400).json({ msg: "Query error.", err });
   }
