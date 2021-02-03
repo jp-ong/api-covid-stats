@@ -9,9 +9,13 @@ const app = express();
 app.use(express.json());
 app.use(cors());
 
-require("./config/db")();
-
 app.use("/api/stats", require("./routes/api/stats"));
+app.use("/", (req, res) => {
+  res.status(200).json({
+    latest: "/api/stats/latest/:days",
+    country: "/api/stats/country/:country",
+  });
+});
 
 const PORT = process.env.PORT || 5000;
 
