@@ -28,7 +28,7 @@ router.get("/latest/:days", async (req, res) => {
     const stats = await Stat.find(QUERY, STAT_PROJECT, OPTIONS);
 
     return stats.length > 0
-      ? res.status(200).json({ stats })
+      ? res.status(200).json({ date, stats })
       : res.status(404).json({ msg: "No available data for this date." });
   } catch (err) {
     return res.status(400).json({ msg: "Query error.", err });
@@ -47,7 +47,7 @@ router.get("/country/:country", async (req, res) => {
     const stats = await Stat.find(QUERY, STAT_PROJECT, OPTIONS);
 
     return stats.length > 0
-      ? res.status(200).json({ stats })
+      ? res.status(200).json({ country: req.params.country, stats })
       : res.status(404).json({ msg: "No available data for this country." });
   } catch (err) {
     return res.status(400).json({ msg: "Query error.", err });
