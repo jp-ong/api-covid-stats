@@ -58,4 +58,35 @@ router.get("/country/:country", async (req, res) => {
   }
 });
 
+router.get("/date/:year/:month/:date", async (req, res) => {
+  await connectDB();
+
+  const { year, month, date } = req.params;
+  const queryDate = new Date(
+    new Date(new Date().setUTCFullYear(year, month - 1, date)).setUTCHours(
+      0,
+      0,
+      0,
+      0
+    )
+  ).toISOString();
+
+  try {
+    const QUERY = {
+      $and: [{ date: queryDate }, { country_codes: { $ne: [] } }],
+    };
+    const OPTIONS = { sort: { country: 1 } };
+
+    const stats = await Stat.find(QUERY, STAT_PROJECT, OPTIONS);
+
+    return stats.length > 0
+      ? res.status(200).json({ date: queryDate, stats })
+      : res
+          .status(404)
+          .json({ date: queryDate, msg: "No available data for this date." });
+  } catch (err) {
+    return res.status(400).json({ msg: "Query error.", err });
+  }
+});
+
 module.exports = router;
