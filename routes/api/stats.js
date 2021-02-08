@@ -13,6 +13,26 @@ const STAT_PROJECT = {
   country_codes: 0,
 };
 
+router.get("/", async (req, res) => {
+  await connectDB();
+
+  try {
+    const QUERY = {
+      country_codes: { $ne: [] },
+    };
+
+    const OPTIONS = { sort: { country: 1, date: -1 } };
+
+    const stats = await Stat.find(QUERY, STAT_PROJECT, OPTIONS);
+
+    return stats.length > 0
+      ? res.status(200).json({ results: stats.length, stats })
+      : res.status(404).json({ msg: "No available data found." });
+  } catch (err) {
+    return res.status(400).json({ msg: "Query error.", err });
+  }
+});
+
 router.get("/latest", async (req, res) => {
   await connectDB();
 
@@ -27,7 +47,9 @@ router.get("/latest", async (req, res) => {
     const stats = await Stat.find(QUERY, STAT_PROJECT, OPTIONS);
 
     return stats.length > 0
-      ? res.status(200).json({ date: latest.date, stats })
+      ? res
+          .status(200)
+          .json({ results: stats.length, date: latest.date, stats })
       : res
           .status(404)
           .json({ date: latest.date, msg: "No available data for this date." });
@@ -80,7 +102,7 @@ router.get("/date/:year/:month/:date", async (req, res) => {
     const stats = await Stat.find(QUERY, STAT_PROJECT, OPTIONS);
 
     return stats.length > 0
-      ? res.status(200).json({ date: queryDate, stats })
+      ? res.status(200).json({ results: stats.length, date: queryDate, stats })
       : res
           .status(404)
           .json({ date: queryDate, msg: "No available data for this date." });
