@@ -11,6 +11,7 @@ const STAT_PROJECT = {
   combined_names: 0,
   uids: 0,
   country_codes: 0,
+  states: 0,
 };
 
 router.get("/", async (req, res) => {
