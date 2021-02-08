@@ -85,7 +85,7 @@ router.get("/country/:country", async (req, res) => {
     const stats = await Stat.find(QUERY, STAT_PROJECT, OPTIONS);
 
     return stats.length > 0
-      ? res.status(200).json({ country, stats })
+      ? res.status(200).json({ results: stats.length, country, stats })
       : res
           .status(404)
           .json({ country, msg: "No available data for this country." });
