@@ -25,8 +25,21 @@ router.get("/", async (req, res) => {
 
     const stats = await Stat.find(QUERY, STAT_PROJECT, OPTIONS);
 
+    const groupBy = function (data, key) {
+      return data.reduce(function (storage, item) {
+        const group = item[key];
+        storage[group] = storage[group] || [];
+
+        storage[group].push(item);
+        return storage;
+      }, {});
+    };
+
     return stats.length > 0
-      ? res.status(200).json({ results: stats.length, stats })
+      ? res.status(200).json({
+          results: stats.length,
+          stats: groupBy(await stats, "country"),
+        })
       : res.status(404).json({ msg: "No available data found." });
   } catch (err) {
     return res.status(400).json({ msg: "Query error.", err });
