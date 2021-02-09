@@ -14,39 +14,6 @@ const STAT_PROJECT = {
   states: 0,
 };
 
-router.get("/", async (req, res) => {
-  await connectDB();
-
-  try {
-    const QUERY = {
-      country_codes: { $ne: [] },
-    };
-
-    const OPTIONS = { sort: { country: 1, date: -1 } };
-
-    const stats = await Stat.find(QUERY, STAT_PROJECT, OPTIONS);
-
-    const groupBy = function (data, key) {
-      return data.reduce(function (storage, item) {
-        const group = item[key];
-        storage[group] = storage[group] || [];
-
-        storage[group].push(item);
-        return storage;
-      }, {});
-    };
-
-    return stats.length > 0
-      ? res.status(200).json({
-          results: stats.length,
-          stats: groupBy(await stats, "country"),
-        })
-      : res.status(404).json({ msg: "No available data found." });
-  } catch (err) {
-    return res.status(400).json({ msg: "Query error.", err });
-  }
-});
-
 router.get("/latest", async (req, res) => {
   await connectDB();
 
@@ -85,7 +52,14 @@ router.get("/country/:country", async (req, res) => {
     const stats = await Stat.find(QUERY, STAT_PROJECT, OPTIONS);
 
     return stats.length > 0
-      ? res.status(200).json({ results: stats.length, country, stats })
+      ? res
+          .status(200)
+          .json({
+            date: stats[0].date,
+            daresults: stats.length,
+            country,
+            stats,
+          })
       : res
           .status(404)
           .json({ country, msg: "No available data for this country." });
